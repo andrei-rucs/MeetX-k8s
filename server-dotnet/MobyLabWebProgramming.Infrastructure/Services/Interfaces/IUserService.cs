@@ -14,8 +14,8 @@ public interface IUserService
 
     public Task<ServiceResponse<PagedResponse<UserDTO>>> GetUsers(PaginationSearchQueryParams pagination, UserDTO? requestingUser, CancellationToken cancellationToken = default);
 
-    public Task<ServiceResponse<LoginResponseDTO>> Login(LoginDTO login, CancellationToken cancellationToken = default);
-    public Task<ServiceResponse> Logout(HttpContext context, UserDTO? requestingUser = default,  CancellationToken cancellationToken = default);
+    // public Task<ServiceResponse<LoginResponseDTO>> Login(LoginDTO login, CancellationToken cancellationToken = default);
+    public Task<ServiceResponse> Logout(HttpContext context, UserDTO? requestingUser = default, CancellationToken cancellationToken = default);
     public Task<ServiceResponse> MakeStaff(Guid userId, UserDTO? requestingUser = default, CancellationToken cancellationToken = default);
     public Task<ServiceResponse> RemoveStaff(Guid userId, UserDTO? requestingUser = default, CancellationToken cancellationToken = default);
 
@@ -23,11 +23,11 @@ public interface IUserService
 
     public Task<ServiceResponse> UpdateUser(UserUpdateDTO user, User? requestingUser = default, CancellationToken cancellationToken = default);
 
-    public Task<ServiceResponse> Register(RegisterDTO register, CancellationToken cancellationToken = default);
+    // public Task<ServiceResponse> Register(RegisterDTO register, CancellationToken cancellationToken = default);
 
-    public Task<ServiceResponse> RequestReset(RequestResetDTO requestReset, CancellationToken cancellationToken = default);
+    // public Task<ServiceResponse> RequestReset(RequestResetDTO requestReset, CancellationToken cancellationToken = default);
 
-    public Task<ServiceResponse> ResetPassword(ResetPasswordDTO reset, CancellationToken cancellationToken = default);
+    // public Task<ServiceResponse> ResetPassword(ResetPasswordDTO reset, CancellationToken cancellationToken = default);
 
-    public Task<ServiceResponse<RefreshResponseDTO>> RefreshToken(CancellationToken cancellationToken = default);
+    // public Task<ServiceResponse<RefreshResponseDTO>> RefreshToken(CancellationToken cancellationToken = default);
 }

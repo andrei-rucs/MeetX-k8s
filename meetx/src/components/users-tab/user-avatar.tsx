@@ -10,7 +10,7 @@ const UserAvatar = (props: {user?: UserDTO, className: String, status: "hidden" 
             <div className="w-full h-full rounded-full flex justify-center items-center text-[1.5em]" style={{backgroundColor: "" + props.user?.color}}>
                 <p className='text-[1em] text-white'>{props.user?.shortName}</p>
             </div> :
-            <img className='w-full h-full rounded-full' src={`http://localhost:5000/${props.user?.id}/Avatar/${props.user?.avatarPath}`}></img>}
+            <img className='w-full h-full rounded-full' src={`${import.meta.env.VITE_BACKEND_URL}/${props.user?.id}/Avatar/${props.user?.avatarPath}`}></img>}
         {
             props.status === "visible" && props.user?.status ?
             <>

@@ -32,7 +32,7 @@ const ProfileFrame = () => {
     useEffect(() => {
         if (status === "success") {
             data.response?.avatarPath !== null && data.response?.avatarPath !== "" ?
-                setImage(`http://localhost:5000/${data.response?.id}/Avatar/${data.response?.avatarPath}`) :
+                setImage(`${import.meta.env.VITE_BACKEND_URL}/${data.response?.id}/Avatar/${data.response?.avatarPath}`) :
                 setImage(null);
             setEmail(data.response?.email === null || data.response?.email === undefined ? "" : data.response?.email);
             setName(data.response?.name === null || data.response?.name === undefined ? "" : data.response?.name);

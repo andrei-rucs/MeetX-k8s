@@ -1,6 +1,6 @@
 import * as signalR from "@microsoft/signalr";
 
-const URL = "http://localhost:5000/chatHub";
+const URL = `${import.meta.env.VITE_BACKEND_URL}/chatHub`;
 
 class Connector {
     private connection: signalR.HubConnection;
@@ -51,7 +51,7 @@ class Connector {
             })
             .catch(err => {
                 if (this.setConnected) this.setConnected(false);
-                if(this.connection.connectionId !== null) {
+                if (this.connection.connectionId !== null) {
                     this.isConnected = true;
                     return;
                 }
@@ -72,7 +72,7 @@ class Connector {
             })
             .catch(err => {
                 console.log('Failed to disconnect from SignalR hub:', err);
-        });
+            });
     }
 
     public newMessage = (GroupId: string, TopicId: string, Text: string, files: any) => {

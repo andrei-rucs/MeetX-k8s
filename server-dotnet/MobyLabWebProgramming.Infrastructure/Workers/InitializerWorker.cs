@@ -88,8 +88,15 @@ public class InitializerWorker : BackgroundService
                 await repositoryService.AddAsync(newTopic, cancellationToken);
             }
 
-            using var package1 = new ExcelPackage(new FileInfo("../MobyLabWebProgramming.Infrastructure/Workers/public-groups.xlsx"));
-            using var package2 = new ExcelPackage(new FileInfo("../MobyLabWebProgramming.Infrastructure/Workers/jobs.xlsx"));
+            var publicGroupsPath = File.Exists("public-groups.xlsx") 
+                ? "public-groups.xlsx" 
+                : "../MobyLabWebProgramming.Infrastructure/Workers/public-groups.xlsx";
+            var jobsPath = File.Exists("jobs.xlsx") 
+                ? "jobs.xlsx" 
+                : "../MobyLabWebProgramming.Infrastructure/Workers/jobs.xlsx";
+
+            using var package1 = new ExcelPackage(new FileInfo(publicGroupsPath));
+            using var package2 = new ExcelPackage(new FileInfo(jobsPath));
 
             var worksheet1 = package1.Workbook.Worksheets[0];
             var worksheet2 = package2.Workbook.Worksheets[0];

@@ -70,7 +70,8 @@ public static class WebApplicationBuilderExtensions
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer()
             .AddMvc()
-            .AddJsonOptions(options => {
+            .AddJsonOptions(options =>
+            {
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); // Adds a conversion by name of the enums, otherwise numbers representing the enum values are used.
                 options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase; // This converts the public property names of the objects serialized to Camel case.
                 options.JsonSerializerOptions.PropertyNameCaseInsensitive = true; // When deserializing request the properties of the JSON are mapped ignoring the casing.
@@ -107,10 +108,8 @@ public static class WebApplicationBuilderExtensions
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidateIssuer = true, // Validate the issuer claim in the JWT. 
-                ValidateAudience = true, // Validate the audience claim in the JWT.
-                ValidAudience = jwtConfiguration.Audience, // Sets the intended audience.
-                ValidIssuer = jwtConfiguration.Issuer, // Sets the issuing authority.
+                ValidateIssuer = false, // server-auth doesn't set issuer
+                ValidateAudience = false, // server-auth doesn't set audience
                 ClockSkew = TimeSpan.Zero // No clock skew is added, when the token expires it will immediately become unusable.
             };
             options.RequireHttpsMetadata = false;
@@ -174,7 +173,6 @@ public static class WebApplicationBuilderExtensions
         builder.Services.AddSignalR();
         builder.Services
             .AddTransient<IUserService, UserService>()
-            .AddTransient<ILoginService, LoginService>()
             .AddTransient<IFileRepository, FileRepository>()
             .AddTransient<IFileService, FileService>()
             .AddTransient<IMailService, MailService>()

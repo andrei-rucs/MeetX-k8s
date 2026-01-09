@@ -15,12 +15,10 @@ namespace MobyLabWebProgramming.Infrastructure.Services.Implementations;
 public class GroupService : IGroupService
 {
     private readonly IRepository<WebAppDatabaseContext> _repository;
-    private readonly ILoginService _loginService;
 
-    public GroupService(IRepository<WebAppDatabaseContext> repository, ILoginService loginService)
+    public GroupService(IRepository<WebAppDatabaseContext> repository)
     {
         _repository = repository;
-        _loginService = loginService;
     }
 
     public async Task<ServiceResponse> AddGroup(GroupAddDTO group, User? requestingUser = default, CancellationToken cancellationToken = default)
@@ -119,7 +117,8 @@ public class GroupService : IGroupService
             {
                 return ServiceResponse<GroupLinkResponse>.FromError(CommonErrors.NotAnAdmin);
             }
-        } else
+        }
+        else
         {
             if (entity.Admins.All(e => e.Id != requestingUser.Id))
             {
@@ -128,7 +127,7 @@ public class GroupService : IGroupService
         }
 
         var result = await _repository.GetAsync(new LinkGroupSpec(groupId), cancellationToken);
-        var token = _loginService.GetRandomToken();
+        var token = "token_test";
 
         if (result == null)
         {
@@ -203,7 +202,7 @@ public class GroupService : IGroupService
 
         group.Users.Remove(requestingUser);
         group.Admins.Remove(requestingUser);
-        
+
         if (group.Admins.Count == 0)
         {
             if (group.Users.Count == 0)
@@ -214,7 +213,7 @@ public class GroupService : IGroupService
 
             var users = group.Users.ToArray();
 
-            foreach ( var user in users )
+            foreach (var user in users)
             {
                 var newAdmin = await _repository.GetAsync(new UserSpec(user.Id), cancellationToken);
                 if (newAdmin != null)
@@ -269,7 +268,8 @@ public class GroupService : IGroupService
         if (change.Role == GroupRoleEnum.Member)
         {
             group.Admins.Remove(user);
-        } else
+        }
+        else
         {
             if (!group.Admins.Contains(user))
             {
@@ -307,7 +307,8 @@ public class GroupService : IGroupService
             if (group.Admins.Any(u => u.Id == member.User.Id))
             {
                 member.isAdmin = true;
-            } else
+            }
+            else
             {
                 member.isAdmin = false;
             }
@@ -510,29 +511,30 @@ public class GroupService : IGroupService
             return ServiceResponse.FromError(CommonErrors.GroupNotFound);
         }
 
-        if(group.isPublic)
+        if (group.isPublic)
         {
-            if(requestingUser.Role != UserRoleEnum.Admin)
+            if (requestingUser.Role != UserRoleEnum.Admin)
             {
                 return ServiceResponse.FromError(CommonErrors.CannotDeletePublicGroup);
             }
-        } else
+        }
+        else
         {
 
-                if (group.Admins.All(e => e.Id != requestingUser.Id))
-                {
-                    return ServiceResponse.FromError(CommonErrors.NotAnAdmin);
-                }
+            if (group.Admins.All(e => e.Id != requestingUser.Id))
+            {
+                return ServiceResponse.FromError(CommonErrors.NotAnAdmin);
+            }
 
-                if (group.Admins.Any(e => e.Id == group.FirstAdminId) && requestingUser.Id != group.FirstAdminId)
-                {
-                    return ServiceResponse.FromError(CommonErrors.NotCreator);
-                }
+            if (group.Admins.Any(e => e.Id == group.FirstAdminId) && requestingUser.Id != group.FirstAdminId)
+            {
+                return ServiceResponse.FromError(CommonErrors.NotCreator);
+            }
         }
 
         if (group.isPublic)
         {
-            if(group.ChildrenGroups.Count != 0)
+            if (group.ChildrenGroups.Count != 0)
             {
                 foreach (var childGroup in group.ChildrenGroups)
                 {
@@ -545,7 +547,8 @@ public class GroupService : IGroupService
                 }
             }
             await _repository.DeleteAsync(new GroupSpec(id), cancellationToken);
-        } else
+        }
+        else
         {
             await _repository.DeleteAsync(new GroupSpec(id), cancellationToken);
         }

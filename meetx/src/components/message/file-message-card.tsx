@@ -15,8 +15,8 @@ const FileMessageCard = (props: {file: FileGetDTO, isGroup: boolean}) => {
 
     const handleDownloadClick = () => {
         axios({
-            url: props.isGroup ? `http://localhost:5000/${selectedTopicId}/Topics/${props.file.path}` :
-            `http://localhost:5000/${selectedConvId}/Users/${props.file.path}`,
+            url: props.isGroup ? `${import.meta.env.VITE_BACKEND_URL}/${selectedTopicId}/Topics/${props.file.path}` :
+            `${import.meta.env.VITE_BACKEND_URL}/${selectedConvId}/Users/${props.file.path}`,
             method: 'GET',
             responseType: 'blob',
           }).then((response) => {
@@ -39,8 +39,8 @@ const FileMessageCard = (props: {file: FileGetDTO, isGroup: boolean}) => {
                 {
                     props.file.type === "Image" ?
                     ( preView ?
-                    <img src={props.isGroup ? `http://localhost:5000/${selectedTopicId}/Topics/${props.file.path}` :
-                    `http://localhost:5000/${selectedConvId}/Users/${props.file.path}`} className="w-full
+                    <img src={props.isGroup ? `${import.meta.env.VITE_BACKEND_URL}/${selectedTopicId}/Topics/${props.file.path}` :
+                    `${import.meta.env.VITE_BACKEND_URL}/${selectedConvId}/Users/${props.file.path}`} className="w-full
                     aspect-square object-contain" loading="lazy"></img> :
                     <div className="w-full h-full relative">
                         <Image className="w-full h-full text-white"/>

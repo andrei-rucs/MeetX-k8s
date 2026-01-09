@@ -15,19 +15,19 @@ export const useAppRouter = () => {
   );
 
   const redirectToLogin = useCallback(
-    () =>
-      navigate({
-        pathname: "/login"
-      }),
-    [navigate]
+    () => {
+      const authUrl = import.meta.env.VITE_AUTH_URL;
+      window.location.replace(`${authUrl}/login`);
+    },
+    []
   );
 
   const redirectToRegister = useCallback(
-    () =>
-      navigate({
-        pathname: "/register"
-      }),
-    [navigate]
+    () => {
+      const authUrl = import.meta.env.VITE_AUTH_URL;
+      window.location.replace(`${authUrl}/register`);
+    },
+    []
   );
 
   return {

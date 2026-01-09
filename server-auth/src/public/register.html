@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - MeetX Auth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(90deg, rgba(17, 20, 28, 1) 0%, rgba(126, 34, 206, 1) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .register-container {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            padding: 48px 40px;
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 384px;
+        }
+
+        h1 {
+            color: white;
+            margin-bottom: 24px;
+            text-align: center;
+            font-size: 36px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            background: white;
+            color: black;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: rgb(126, 34, 206);
+        }
+
+        input::placeholder {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        select option {
+            background: white;
+            color: black;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: rgb(126, 34, 206);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: rgb(109, 40, 217);
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            background: rgba(255, 255, 255, 0.3);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 14px;
+        }
+
+        .message.success {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+            border: 1px solid rgba(76, 175, 80, 0.4);
+        }
+
+        .message.error {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+            border: 1px solid rgba(244, 67, 54, 0.4);
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 24px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .footer-text a {
+            color: rgb(126, 34, 206);
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-text a:hover {
+            color: rgb(109, 40, 217);
+        }
+
+        .loader {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .token-display {
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            display: none;
+            color: white;
+        }
+
+        .token-display.show {
+            display: block;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 24px;
+            color: rgb(126, 34, 206);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: rgb(109, 40, 217);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="register-container">
+        <h1>Register</h1>
+        <p class="subtitle">Create your MeetX account</p>
+
+        <div id="message" class="message"></div>
+
+        <div>
+            <div class="form-group">
+                <input type="email" id="registerEmail" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+                <input type="text" id="registerName" placeholder="Name" required>
+            </div>
+            <div class="form-group">
+                <select id="registerGroupId" required>
+                    <option value="">Select Industry...</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="text" id="registerPosition" placeholder="Position" required>
+            </div>
+            <div class="form-group">
+                <input type="password" id="registerPassword" placeholder="Password" minlength="6" required>
+            </div>
+            <button type="button" class="btn" id="registerBtn" onclick="handleRegister()">Register</button>
+        </div>
+
+        <div class="footer-text">
+            Already on MeetX? <a href="/login">Sign In</a>
+        </div>
+
+        <div id="tokenDisplay" class="token-display"></div>
+    </div>
+
+    <script>
+        // Load groups on page load
+        async function loadGroups() {
+            try {
+                const response = await fetch('/api/auth/groups');
+                const data = await response.json();
+
+                if (response.ok && data.response?.data) {
+                    const select = document.getElementById('registerGroupId');
+                    data.response.data.forEach(group => {
+                        const option = document.createElement('option');
+                        option.value = group.id;
+                        option.textContent = group.name;
+                        select.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Failed to load groups:', error);
+            }
+        }
+
+        loadGroups();
+
+        function showMessage(text, type) {
+            const msg = document.getElementById('message');
+            msg.textContent = text;
+            msg.className = `message ${type}`;
+            msg.style.display = 'block';
+        }
+
+        function hideMessage() {
+            document.getElementById('message').style.display = 'none';
+        }
+
+        function setButtonLoading(isLoading) {
+            const btn = document.getElementById('registerBtn');
+            if (isLoading) {
+                btn.disabled = true;
+                btn.innerHTML = '<span class="loader"></span>';
+            } else {
+                btn.disabled = false;
+                btn.textContent = 'Register';
+            }
+        }
+
+        async function handleRegister() {
+            hideMessage();
+            setButtonLoading(true);
+
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const position = document.getElementById('registerPosition').value;
+            const groupId = document.getElementById('registerGroupId').value;
+
+            if (!groupId) {
+                showMessage('Please select an industry', 'error');
+                setButtonLoading(false);
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, email, password, position, groupId })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showMessage('Registration successful! Redirecting to dashboard...', 'success');
+
+                    // Redirect imediat fără delay
+                    window.location.href = `FRONTEND_URL_PLACEHOLDER/redirectLogin?token=${encodeURIComponent(data.response.token)}`;
+                } else {
+                    showMessage(data.error || 'Registration failed', 'error');
+                }
+            } catch (error) {
+                showMessage('Network error: ' + error.message, 'error');
+            } finally {
+                setButtonLoading(false);
+            }
+        }
+    </script>
+</body>
+
+</html>
