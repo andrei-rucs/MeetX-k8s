@@ -1,0 +1,85 @@
+ingress:
+  enabled: true
+  className: ""
+  hosts:
+    frontend: meetx.local
+    auth: auth.meetx.local
+    api: api.meetx.local
+    pgadmin: pgadmin.meetx.local
+
+secrets:
+  postgresPassword: "meetx"
+  pgadminPassword: "admin"
+  jwtKey: "SecretKey00000000000000000000000"
+  refreshJwtKey: "SecretKey19897340935095882903589"
+  linkedinClientSecret: "WPL_AP0.UZCau3vqoHJiFhCe.MjI2Mzg3MTQ5Mw=="
+  mailPassword: "d1d27bd6b46e56"
+  adminPassword: "admin123"
+
+db:
+  image:
+    repository: postgres
+    tag: 13.2-alpine
+    pullPolicy: IfNotPresent
+  storage:
+    size: 1Gi
+  env:
+    postgresUser: meetx
+    postgresDb: meetx
+
+pgadmin:
+  image:
+    repository: dpage/pgadmin4
+    tag: latest
+    pullPolicy: IfNotPresent
+  storage:
+    size: 1Gi
+  env:
+    defaultEmail: admin@admin.com
+  service:
+    port: 8888
+
+serverDotnet:
+  image:
+    repository: meetx-server-dotnet
+    tag: latest
+    pullPolicy: Never
+  storage:
+    size: 1Gi
+  service:
+    port: 8080
+  env:
+    aspnetcoreEnvironment: Development
+    jwtIssuer: https://my.app
+    jwtAudience: https://my.app
+    linkedinClientId: 777xvafbt8y9ov
+    mailEnable: "true"
+    mailHost: sandbox.smtp.mailtrap.io
+    mailPort: "2525"
+    mailAddress: team@meetx.com
+    mailUser: 63cfb840afb0b1
+
+serverAuth:
+  image:
+    repository: meetx-server-auth
+    tag: latest
+    pullPolicy: Never
+  service:
+    port: 3001
+  env:
+    nodeEnv: production
+    jwtAccessExpiration: 15m
+    jwtRefreshExpiration: 7d
+    adminEmail: admin@meetx.com
+    mailHost: sandbox.smtp.mailtrap.io
+    mailPort: "2525"
+    mailUser: 63cfb840afb0b1
+    mailFrom: team@meetx.com
+
+frontend:
+  image:
+    repository: meetx-frontend
+    tag: latest
+    pullPolicy: Never
+  service:
+    port: 80

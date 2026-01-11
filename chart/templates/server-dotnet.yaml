@@ -1,0 +1,117 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: dotnet-files-claim
+  namespace: {{ .Release.Namespace }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.serverDotnet.storage.size }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-dotnet
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: server-dotnet
+  template:
+    metadata:
+      labels:
+        app: server-dotnet
+    spec:
+      containers:
+      - name: server-dotnet
+        image: "{{ .Values.serverDotnet.image.repository }}:{{ .Values.serverDotnet.image.tag }}"
+        imagePullPolicy: {{ .Values.serverDotnet.image.pullPolicy }}
+        ports:
+        - containerPort: 8080
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: {{ .Values.serverDotnet.env.aspnetcoreEnvironment | quote }}
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: meetx-secrets
+              key: POSTGRES_PASSWORD
+        - name: ConnectionStrings__WebAppDatabase
+          value: "Host=meetx-db;Port=5432;Database=meetx;Username=meetx;Password=$(POSTGRES_PASSWORD)"
+        - name: JwtConfiguration__Key
+          valueFrom:
+            secretKeyRef:
+              name: meetx-secrets
+              key: JWT_KEY
+        - name: JwtConfiguration__Issuer
+          value: {{ .Values.serverDotnet.env.jwtIssuer | quote }}
+        - name: JwtConfiguration__Audience
+          value: {{ .Values.serverDotnet.env.jwtAudience | quote }}
+        - name: RefreshJwtConfiguration__Key
+          valueFrom:
+            secretKeyRef:
+              name: meetx-secrets
+              key: REFRESH_JWT_KEY
+        - name: RefreshJwtConfiguration__Issuer
+          value: {{ .Values.serverDotnet.env.jwtIssuer | quote }}
+        - name: RefreshJwtConfiguration__Audience
+          value: {{ .Values.serverDotnet.env.jwtAudience | quote }}
+        - name: CorsConfiguration__Origins__0
+          value: "http://localhost:8080"
+        - name: CorsConfiguration__Origins__1
+          value: "http://localhost:3001"
+        - name: CorsConfiguration__Origins__2
+          value: "http://localhost:80"
+        - name: CorsConfiguration__Origins__3
+          value: "http://localhost"
+        - name: CorsConfiguration__Origins__4
+          value: "http://meetx"
+        - name: CorsConfiguration__Origins__5
+          value: "http://server-auth"
+        - name: LinkedInConfiguration__ClientId
+          value: {{ .Values.serverDotnet.env.linkedinClientId | quote }}
+        - name: LinkedInConfiguration__ClientSecret
+          valueFrom:
+            secretKeyRef:
+              name: meetx-secrets
+              key: LINKEDIN_CLIENT_SECRET
+        - name: FileStorageConfiguration__SavePath
+          value: "./wwwroot"
+        - name: MailConfiguration__MailEnable
+          value: {{ .Values.serverDotnet.env.mailEnable | quote }}
+        - name: MailConfiguration__MailHost
+          value: {{ .Values.serverDotnet.env.mailHost | quote }}
+        - name: MailConfiguration__MailPort
+          value: {{ .Values.serverDotnet.env.mailPort | quote }}
+        - name: MailConfiguration__MailAddress
+          value: {{ .Values.serverDotnet.env.mailAddress | quote }}
+        - name: MailConfiguration__MailUser
+          value: {{ .Values.serverDotnet.env.mailUser | quote }}
+        - name: MailConfiguration__MailPassword
+          valueFrom:
+            secretKeyRef:
+              name: meetx-secrets
+              key: MAIL_PASSWORD
+        volumeMounts:
+        - name: dotnet-files
+          mountPath: /app/wwwroot
+      volumes:
+      - name: dotnet-files
+        persistentVolumeClaim:
+          claimName: dotnet-files-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server-dotnet
+  namespace: {{ .Release.Namespace }}
+spec:
+  type: ClusterIP
+  selector:
+    app: server-dotnet
+  ports:
+    - protocol: TCP
+      port: {{ .Values.serverDotnet.service.port }}
+      targetPort: 8080

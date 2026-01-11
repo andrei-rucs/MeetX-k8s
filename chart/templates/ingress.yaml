@@ -1,0 +1,51 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: meetx-ingress
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: {{ .Values.ingress.hosts.frontend }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: meetx
+            port:
+              number: {{ .Values.frontend.service.port }}
+  - host: {{ .Values.ingress.hosts.auth }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: server-auth
+            port:
+              number: {{ .Values.serverAuth.service.port }}
+  - host: {{ .Values.ingress.hosts.api }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: server-dotnet
+            port:
+              number: {{ .Values.serverDotnet.service.port }}
+  - host: {{ .Values.ingress.hosts.pgadmin }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: pgadmin
+            port:
+              number: {{ .Values.pgadmin.service.port }}
+{{- end }}

@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-auth
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: server-auth
+  template:
+    metadata:
+      labels:
+        app: server-auth
+    spec:
+      containers:
+      - name: server-auth
+        image: "{{ .Values.serverAuth.image.repository }}:{{ .Values.serverAuth.image.tag }}"
+        imagePullPolicy: {{ .Values.serverAuth.image.pullPolicy }}
+        ports:
+        - containerPort: 3001
+        env:
+        - name: NODE_ENV
+          value: {{ .Values.serverAuth.env.nodeEnv | quote }}
+        - name: PORT
+          value: "3001"
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: meetx-secrets
+              key: POSTGRES_PASSWORD
+        - name: DATABASE_URL
+          value: "postgresql://meetx:$(POSTGRES_PASSWORD)@meetx-db:5432/meetx"
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: meetx-secrets
+              key: JWT_KEY
+        - name: JWT_REFRESH_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: meetx-secrets
+              key: REFRESH_JWT_KEY
+        - name: JWT_ACCESS_EXPIRATION
+          value: {{ .Values.serverAuth.env.jwtAccessExpiration | quote }}
+        - name: JWT_REFRESH_EXPIRATION
+          value: {{ .Values.serverAuth.env.jwtRefreshExpiration | quote }}
+        - name: CORS_ORIGIN
+          value: "http://localhost:3001,http://localhost:8080,http://localhost:80,http://localhost,http://meetx,http://server-dotnet"
+        - name: ADMIN_EMAIL
+          value: {{ .Values.serverAuth.env.adminEmail | quote }}
+        - name: ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: meetx-secrets
+              key: ADMIN_PASSWORD
+        - name: DB_PATH
+          value: "/app/data/users.json"
+        - name: AUTH_URL
+          value: "http://localhost:3001"
+        - name: FRONTEND_URL
+          value: "http://localhost"
+        - name: BACKEND_URL
+          value: "http://server-dotnet:8080"
+        - name: MAIL_HOST
+          value: {{ .Values.serverAuth.env.mailHost | quote }}
+        - name: MAIL_PORT
+          value: {{ .Values.serverAuth.env.mailPort | quote }}
+        - name: MAIL_USER
+          value: {{ .Values.serverAuth.env.mailUser | quote }}
+        - name: MAIL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: meetx-secrets
+              key: MAIL_PASSWORD
+        - name: MAIL_FROM
+          value: {{ .Values.serverAuth.env.mailFrom | quote }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server-auth
+  namespace: {{ .Release.Namespace }}
+spec:
+  type: ClusterIP
+  selector:
+    app: server-auth
+  ports:
+    - protocol: TCP
+      port: {{ .Values.serverAuth.service.port }}
+      targetPort: 3001
