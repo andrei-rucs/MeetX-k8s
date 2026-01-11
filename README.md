@@ -30,7 +30,7 @@ Create chats and groups and share your knowledge with other people from your fie
 
 # How to run
 
-## Minikube
+## Install Minikube
 Install minikube as per the [official docs](https://minikube.sigs.k8s.io/docs/start/) and run `minikube start`.
 Install `kubectl` and `k9s` for convenience.
 
@@ -39,7 +39,7 @@ Enable the `ingress` minikube addon for the ingresses to work.
 minikube addons enable ingress
 ```
 
-## Hostnames
+## Add Hostnames
 Update `/etc/hosts` to add the hostname the local app deployment needs:
 1. Run `minikube ip` to get the IP
 2. Add the following line to the `/etc/hosts`:
@@ -47,7 +47,7 @@ Update `/etc/hosts` to add the hostname the local app deployment needs:
 <MINIKUBE IP> meetx.local auth.meetx.local api.meetx.local pgadmin.meetx.local portainer.meetx.local grafana.meetx.local alertmanager.meetx.local prometheus.meetx.local
 ```
 
-## Docker images
+## Build Docker Images
 Firstly, run `eval $(minikube docker-env)` before the `docker build` comands to ensure that the Minikube's Docker daemon takes care of building the container images. 
 
 Build all the docker images with `docker build <Dockerfile path> -t <image-name:latest>`.
@@ -59,11 +59,18 @@ docker build -t meetx-frontend:latest \
   ./meetx
 ```
 
-## k8s deployment
+## Deploy to k8s
 Deploy the meetx helm chart with:
 ```sh
 helm install meetx ./chart --namespace meetx --create-namespace 
 ```
+
+## Access the app
+Explore the front page and create a new user. Afterwards, explore the user personal page and create chats and groups, with invites for other users.
+
+[Front Page](http://meetx.local)
+[Login Page](http://auth.meetx.local/login)
+[Register Page](http://auth.meetx.local/register)
 
 ## pgadmin
 Access `http://pgadmin.meetx.local` or run `minikube service pgadmin -n meetx`. Use the following configuration for accessing the meetx db:
