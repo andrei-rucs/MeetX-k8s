@@ -8,11 +8,16 @@ import { initDatabase } from './utils/database.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
+import client from 'prom-client';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 dotenv.config();
+
+// Initialize Prometheus metrics
+const register = new client.Registry();
+client.collectDefaultMetrics({ register });
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -39,6 +44,16 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Metrics endpoint
+app.get('/metrics', async (req, res) => {
+    try {
+        res.set('Content-Type', register.contentType);
+        res.end(await register.metrics());
+    } catch (ex) {
+        res.status(500).end(ex);
+    }
+});
 
 // API Routes (before static files)
 app.use('/api/auth', authRoutes);
@@ -82,7 +97,7 @@ app.get('/health', (req, res) => {
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-    console.log(`🚀 MeetX Auth Server running on http://localhost:${PORT}`);
-    console.log(`🔐 Login: http://localhost:${PORT}/login`);
-    console.log(`📝 Register: http://localhost:${PORT}/register`);
+    console.log(`MeetX Auth Server running on http://localhost:${PORT}`);
+    console.log(`Login: http://localhost:${PORT}/login`);
+    console.log(`Register: http://localhost:${PORT}/register`);
 });

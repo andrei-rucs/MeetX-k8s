@@ -103,11 +103,14 @@ kind: Service
 metadata:
   name: server-dotnet
   namespace: {{ .Release.Namespace }}
+  labels:
+    app: server-dotnet
 spec:
   type: ClusterIP
   selector:
     app: server-dotnet
   ports:
-    - protocol: TCP
+    - name: http
+      protocol: TCP
       port: {{ .Values.serverDotnet.service.port }}
       targetPort: 8080

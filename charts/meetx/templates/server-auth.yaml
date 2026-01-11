@@ -80,11 +80,14 @@ kind: Service
 metadata:
   name: server-auth
   namespace: {{ .Release.Namespace }}
+  labels:
+    app: server-auth
 spec:
   type: ClusterIP
   selector:
     app: server-auth
   ports:
-    - protocol: TCP
+    - name: http
+      protocol: TCP
       port: {{ .Values.serverAuth.service.port }}
       targetPort: 3001

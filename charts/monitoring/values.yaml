@@ -1,0 +1,38 @@
+kube-prometheus-stack:
+  grafana:
+    enabled: true
+    ingress:
+      enabled: true
+      ingressClassName: ""
+      hosts:
+        - grafana.meetx.local
+      path: /
+      pathType: Prefix
+      annotations:
+        nginx.ingress.kubernetes.io/rewrite-target: /
+  
+  alertmanager:
+    enabled: true
+    ingress:
+      enabled: true
+      ingressClassName: ""
+      hosts:
+        - alertmanager.meetx.local
+      paths:
+        - /
+      pathType: Prefix
+      annotations:
+        nginx.ingress.kubernetes.io/rewrite-target: /
+
+  prometheus:
+    enabled: true
+    ingress:
+      enabled: true
+      ingressClassName: ""
+      hosts:
+        - prometheus.meetx.local
+      paths:
+        - /
+      pathType: Prefix
+      annotations:
+        nginx.ingress.kubernetes.io/rewrite-target: /
