@@ -34,4 +34,40 @@ spec:
     path: /metrics
     interval: {{ .Values.metrics.serviceMonitor.interval }}
     scrapeTimeout: {{ .Values.metrics.serviceMonitor.scrapeTimeout }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ .Release.Name }}-meetx
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: meetx
+    {{- toYaml .Values.metrics.serviceMonitor.labels | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: meetx
+  endpoints:
+  - port: metrics
+    path: /metrics
+    interval: {{ .Values.metrics.serviceMonitor.interval }}
+    scrapeTimeout: {{ .Values.metrics.serviceMonitor.scrapeTimeout }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ .Release.Name }}-meetx-db
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: meetx-db
+    {{- toYaml .Values.metrics.serviceMonitor.labels | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: meetx-db
+  endpoints:
+  - port: metrics
+    path: /metrics
+    interval: {{ .Values.metrics.serviceMonitor.interval }}
+    scrapeTimeout: {{ .Values.metrics.serviceMonitor.scrapeTimeout }}
 {{- end }}

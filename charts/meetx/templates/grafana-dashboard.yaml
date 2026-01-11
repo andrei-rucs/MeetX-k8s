@@ -1,0 +1,176 @@
+{{- if .Values.metrics.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-grafana-dashboard
+  namespace: {{ .Release.Namespace }}
+  labels:
+    grafana_dashboard: "1"
+    app: meetx
+data:
+  meetx-dashboard.json: |
+    {
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "id": null,
+      "links": [],
+      "liveNow": false,
+      "panels": [
+        {
+          "collapsed": false,
+          "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+          "id": 100,
+          "panels": [],
+          "title": "Frontend (MeetX)",
+          "type": "row"
+        },
+        {
+          "title": "Uptime",
+          "type": "stat",
+          "gridPos": { "h": 6, "w": 4, "x": 0, "y": 1 },
+          "targets": [{ "expr": "time() - process_start_time_seconds{service=\"meetx\"}", "legendFormat": "Uptime" }],
+          "fieldConfig": { "defaults": { "unit": "s" } }
+        },
+        {
+          "title": "CPU Usage",
+          "type": "timeseries",
+          "gridPos": { "h": 6, "w": 7, "x": 4, "y": 1 },
+          "targets": [{ "expr": "rate(container_cpu_usage_seconds_total{namespace=\"{{ .Release.Namespace }}\", container=\"meetx\"}[1m])", "legendFormat": "CPU Core" }]
+        },
+        {
+          "title": "Memory Usage",
+          "type": "timeseries",
+          "gridPos": { "h": 6, "w": 7, "x": 11, "y": 1 },
+          "targets": [{ "expr": "container_memory_usage_bytes{namespace=\"{{ .Release.Namespace }}\", container=\"meetx\"}", "legendFormat": "RAM" }],
+          "fieldConfig": { "defaults": { "unit": "bytes" } }
+        },
+        {
+          "title": "Connections & Requests",
+          "type": "timeseries",
+          "gridPos": { "h": 6, "w": 6, "x": 18, "y": 1 },
+          "targets": [
+            { "expr": "nginx_connections_active{service=\"meetx\"}", "legendFormat": "Active Conn" },
+            { "expr": "rate(nginx_http_requests_total{service=\"meetx\"}[1m])", "legendFormat": "Req/s" }
+          ]
+        },
+
+        {
+          "collapsed": false,
+          "gridPos": { "h": 1, "w": 24, "x": 0, "y": 7 },
+          "id": 200,
+          "panels": [],
+          "title": "Backend (Dotnet)",
+          "type": "row"
+        },
+        {
+          "title": "Uptime",
+          "type": "stat",
+          "gridPos": { "h": 6, "w": 4, "x": 0, "y": 8 },
+          "targets": [{ "expr": "time() - process_start_time_seconds{service=\"server-dotnet\"}", "legendFormat": "Uptime" }],
+          "fieldConfig": { "defaults": { "unit": "s" } }
+        },
+        {
+          "title": "CPU Usage",
+          "type": "timeseries",
+          "gridPos": { "h": 6, "w": 7, "x": 4, "y": 8 },
+          "targets": [{ "expr": "rate(container_cpu_usage_seconds_total{namespace=\"{{ .Release.Namespace }}\", container=\"server-dotnet\"}[1m])", "legendFormat": "CPU Core" }]
+        },
+        {
+          "title": "Memory Usage",
+          "type": "timeseries",
+          "gridPos": { "h": 6, "w": 7, "x": 11, "y": 8 },
+          "targets": [{ "expr": "container_memory_usage_bytes{namespace=\"{{ .Release.Namespace }}\", container=\"server-dotnet\"}", "legendFormat": "RAM" }],
+          "fieldConfig": { "defaults": { "unit": "bytes" } }
+        },
+        {
+          "title": "Request Rate",
+          "type": "timeseries",
+          "gridPos": { "h": 6, "w": 6, "x": 18, "y": 8 },
+          "targets": [{ "expr": "rate(http_requests_received_total{service=\"server-dotnet\"}[1m])", "legendFormat": "Req/s" }]
+        },
+
+        {
+          "collapsed": false,
+          "gridPos": { "h": 1, "w": 24, "x": 0, "y": 14 },
+          "id": 300,
+          "panels": [],
+          "title": "Auth Server",
+          "type": "row"
+        },
+        {
+          "title": "Uptime",
+          "type": "stat",
+          "gridPos": { "h": 6, "w": 4, "x": 0, "y": 15 },
+          "targets": [{ "expr": "time() - process_start_time_seconds{service=\"server-auth\"}", "legendFormat": "Uptime" }],
+          "fieldConfig": { "defaults": { "unit": "s" } }
+        },
+        {
+          "title": "CPU Usage",
+          "type": "timeseries",
+          "gridPos": { "h": 6, "w": 7, "x": 4, "y": 15 },
+          "targets": [{ "expr": "rate(container_cpu_usage_seconds_total{namespace=\"{{ .Release.Namespace }}\", container=\"server-auth\"}[1m])", "legendFormat": "CPU Core" }]
+        },
+        {
+          "title": "Memory Usage",
+          "type": "timeseries",
+          "gridPos": { "h": 6, "w": 7, "x": 11, "y": 15 },
+          "targets": [{ "expr": "container_memory_usage_bytes{namespace=\"{{ .Release.Namespace }}\", container=\"server-auth\"}", "legendFormat": "RAM" }],
+          "fieldConfig": { "defaults": { "unit": "bytes" } }
+        },
+        {
+          "title": "Event Loop Lag",
+          "type": "timeseries",
+          "gridPos": { "h": 6, "w": 6, "x": 18, "y": 15 },
+          "targets": [{ "expr": "nodejs_eventloop_lag_seconds{service=\"server-auth\"}", "legendFormat": "Lag" }]
+        },
+
+        {
+          "collapsed": false,
+          "gridPos": { "h": 1, "w": 24, "x": 0, "y": 21 },
+          "id": 400,
+          "panels": [],
+          "title": "Database",
+          "type": "row"
+        },
+        {
+          "title": "Uptime",
+          "type": "stat",
+          "gridPos": { "h": 6, "w": 4, "x": 0, "y": 22 },
+          "targets": [{ "expr": "time() - pg_postmaster_start_time_seconds{service=\"meetx-db\"}", "legendFormat": "Uptime" }],
+          "fieldConfig": { "defaults": { "unit": "s" } }
+        },
+        {
+          "title": "CPU Usage",
+          "type": "timeseries",
+          "gridPos": { "h": 6, "w": 7, "x": 4, "y": 22 },
+          "targets": [{ "expr": "rate(container_cpu_usage_seconds_total{namespace=\"{{ .Release.Namespace }}\", container=\"meetx-db\"}[1m])", "legendFormat": "CPU Core" }]
+        },
+        {
+          "title": "Memory Usage",
+          "type": "timeseries",
+          "gridPos": { "h": 6, "w": 7, "x": 11, "y": 22 },
+          "targets": [{ "expr": "container_memory_usage_bytes{namespace=\"{{ .Release.Namespace }}\", container=\"meetx-db\"}", "legendFormat": "RAM" }],
+          "fieldConfig": { "defaults": { "unit": "bytes" } }
+        },
+        {
+          "title": "Transactions & IO",
+          "type": "timeseries",
+          "gridPos": { "h": 6, "w": 6, "x": 18, "y": 22 },
+          "targets": [
+            { "expr": "rate(pg_stat_database_xact_commit{service=\"meetx-db\"}[1m])", "legendFormat": "Commits/s" },
+            { "expr": "rate(pg_stat_database_tup_fetched{service=\"meetx-db\"}[1m])", "legendFormat": "Rows Fetched/s" },
+            { "expr": "rate(pg_stat_database_tup_inserted{service=\"meetx-db\"}[1m])", "legendFormat": "Rows Inserted/s" }
+          ]
+        }
+      ],
+      "refresh": "5s",
+      "schemaVersion": 38,
+      "style": "dark",
+      "tags": [],
+      "time": { "from": "now-1h", "to": "now" },
+      "title": "MeetX Comprehensive Overview",
+      "uid": "meetx-overview",
+      "version": 1
+    }
+{{- end }}
