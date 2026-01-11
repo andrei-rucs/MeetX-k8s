@@ -322,7 +322,8 @@
                     // Redirect imediat fără delay
                     window.location.href = `FRONTEND_URL_PLACEHOLDER/redirectLogin?token=${encodeURIComponent(data.response.token)}`;
                 } else {
-                    showMessage(data.error || 'Registration failed', 'error');
+                    const errorMessage = data.error || (data.errors ? data.errors.map(e => e.msg).join(', ') : 'Registration failed');
+                    showMessage(errorMessage, 'error');
                 }
             } catch (error) {
                 showMessage('Network error: ' + error.message, 'error');

@@ -14,11 +14,11 @@ router.post('/register',
     body('password').isLength({ min: 6 }),
     body('name').trim().notEmpty(),
     body('groupId').notEmpty(),
-    body('position').trim().notEmpty(),
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+            console.error('Validation errors:', errors.array());
+            return res.status(400).json({ errors: errors.array(), error: 'Validation failed: ' + errors.array().map(e => e.msg).join(', ') });
         }
 
         try {
