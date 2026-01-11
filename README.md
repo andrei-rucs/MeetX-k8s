@@ -68,9 +68,9 @@ helm install meetx ./chart --namespace meetx --create-namespace
 ## Access the app
 Explore the front page and create a new user. Afterwards, explore the user personal page and create chats and groups, with invites for other users.
 
-[Front Page](http://meetx.local)
-[Login Page](http://auth.meetx.local/login)
-[Register Page](http://auth.meetx.local/register)
+[Front Page](http://meetx.local)  
+[Login Page](http://auth.meetx.local/login)  
+[Register Page](http://auth.meetx.local/register)  
 
 ## pgadmin
 Access `http://pgadmin.meetx.local` or run `minikube service pgadmin -n meetx`. Use the following configuration for accessing the meetx db:
