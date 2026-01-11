@@ -22,7 +22,7 @@ data:
           "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
           "id": 100,
           "panels": [],
-          "title": "Frontend (MeetX)",
+          "title": "Frontend",
           "type": "row"
         },
         {
@@ -36,13 +36,13 @@ data:
           "title": "CPU Usage",
           "type": "timeseries",
           "gridPos": { "h": 6, "w": 7, "x": 4, "y": 1 },
-          "targets": [{ "expr": "rate(container_cpu_usage_seconds_total{namespace=\"{{ .Release.Namespace }}\", container=\"meetx\"}[1m])", "legendFormat": "CPU Core" }]
+          "targets": [{ "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"{{ .Release.Namespace }}\", pod=~\"meetx-.*\", pod!~\"meetx-db-.*\"}[1m])) by (pod)", "legendFormat": "CPU {{`{{pod}}`}}" }]
         },
         {
           "title": "Memory Usage",
           "type": "timeseries",
           "gridPos": { "h": 6, "w": 7, "x": 11, "y": 1 },
-          "targets": [{ "expr": "container_memory_usage_bytes{namespace=\"{{ .Release.Namespace }}\", container=\"meetx\"}", "legendFormat": "RAM" }],
+          "targets": [{ "expr": "sum(container_memory_usage_bytes{namespace=\"{{ .Release.Namespace }}\", pod=~\"meetx-.*\", pod!~\"meetx-db-.*\"}) by (pod)", "legendFormat": "RAM {{`{{pod}}`}}" }],
           "fieldConfig": { "defaults": { "unit": "bytes" } }
         },
         {
@@ -60,7 +60,7 @@ data:
           "gridPos": { "h": 1, "w": 24, "x": 0, "y": 7 },
           "id": 200,
           "panels": [],
-          "title": "Backend (Dotnet)",
+          "title": "Backend",
           "type": "row"
         },
         {
@@ -74,13 +74,13 @@ data:
           "title": "CPU Usage",
           "type": "timeseries",
           "gridPos": { "h": 6, "w": 7, "x": 4, "y": 8 },
-          "targets": [{ "expr": "rate(container_cpu_usage_seconds_total{namespace=\"{{ .Release.Namespace }}\", container=\"server-dotnet\"}[1m])", "legendFormat": "CPU Core" }]
+          "targets": [{ "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"{{ .Release.Namespace }}\", pod=~\"server-dotnet-.*\"}[1m])) by (pod)", "legendFormat": "CPU {{`{{pod}}`}}" }]
         },
         {
           "title": "Memory Usage",
           "type": "timeseries",
           "gridPos": { "h": 6, "w": 7, "x": 11, "y": 8 },
-          "targets": [{ "expr": "container_memory_usage_bytes{namespace=\"{{ .Release.Namespace }}\", container=\"server-dotnet\"}", "legendFormat": "RAM" }],
+          "targets": [{ "expr": "sum(container_memory_usage_bytes{namespace=\"{{ .Release.Namespace }}\", pod=~\"server-dotnet-.*\"}) by (pod)", "legendFormat": "RAM {{`{{pod}}`}}" }],
           "fieldConfig": { "defaults": { "unit": "bytes" } }
         },
         {
@@ -109,13 +109,13 @@ data:
           "title": "CPU Usage",
           "type": "timeseries",
           "gridPos": { "h": 6, "w": 7, "x": 4, "y": 15 },
-          "targets": [{ "expr": "rate(container_cpu_usage_seconds_total{namespace=\"{{ .Release.Namespace }}\", container=\"server-auth\"}[1m])", "legendFormat": "CPU Core" }]
+          "targets": [{ "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"{{ .Release.Namespace }}\", pod=~\"server-auth-.*\"}[1m])) by (pod)", "legendFormat": "CPU {{`{{pod}}`}}" }]
         },
         {
           "title": "Memory Usage",
           "type": "timeseries",
           "gridPos": { "h": 6, "w": 7, "x": 11, "y": 15 },
-          "targets": [{ "expr": "container_memory_usage_bytes{namespace=\"{{ .Release.Namespace }}\", container=\"server-auth\"}", "legendFormat": "RAM" }],
+          "targets": [{ "expr": "sum(container_memory_usage_bytes{namespace=\"{{ .Release.Namespace }}\", pod=~\"server-auth-.*\"}) by (pod)", "legendFormat": "RAM {{`{{pod}}`}}" }],
           "fieldConfig": { "defaults": { "unit": "bytes" } }
         },
         {
@@ -137,20 +137,20 @@ data:
           "title": "Uptime",
           "type": "stat",
           "gridPos": { "h": 6, "w": 4, "x": 0, "y": 22 },
-          "targets": [{ "expr": "time() - pg_postmaster_start_time_seconds{service=\"meetx-db\"}", "legendFormat": "Uptime" }],
+          "targets": [{ "expr": "min(time() - container_start_time_seconds{namespace=\"{{ .Release.Namespace }}\", pod=~\"meetx-db-.*\"})", "legendFormat": "Uptime" }],
           "fieldConfig": { "defaults": { "unit": "s" } }
         },
         {
           "title": "CPU Usage",
           "type": "timeseries",
           "gridPos": { "h": 6, "w": 7, "x": 4, "y": 22 },
-          "targets": [{ "expr": "rate(container_cpu_usage_seconds_total{namespace=\"{{ .Release.Namespace }}\", container=\"meetx-db\"}[1m])", "legendFormat": "CPU Core" }]
+          "targets": [{ "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"{{ .Release.Namespace }}\", pod=~\"meetx-db-.*\"}[1m])) by (pod)", "legendFormat": "CPU {{`{{pod}}`}}" }]
         },
         {
           "title": "Memory Usage",
           "type": "timeseries",
           "gridPos": { "h": 6, "w": 7, "x": 11, "y": 22 },
-          "targets": [{ "expr": "container_memory_usage_bytes{namespace=\"{{ .Release.Namespace }}\", container=\"meetx-db\"}", "legendFormat": "RAM" }],
+          "targets": [{ "expr": "sum(container_memory_usage_bytes{namespace=\"{{ .Release.Namespace }}\", pod=~\"meetx-db-.*\"}) by (pod)", "legendFormat": "RAM {{`{{pod}}`}}" }],
           "fieldConfig": { "defaults": { "unit": "bytes" } }
         },
         {
@@ -169,7 +169,7 @@ data:
       "style": "dark",
       "tags": [],
       "time": { "from": "now-1h", "to": "now" },
-      "title": "MeetX Comprehensive Overview",
+      "title": "MeetX Overview",
       "uid": "meetx-overview",
       "version": 1
     }
