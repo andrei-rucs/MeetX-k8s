@@ -56,11 +56,11 @@ spec:
         - name: DB_PATH
           value: "/app/data/users.json"
         - name: AUTH_URL
-          value: "http://localhost:3001"
+          value: "http://auth.meetx.local"
         - name: FRONTEND_URL
-          value: "http://localhost"
+          value: "http://meetx.local"
         - name: BACKEND_URL
-          value: "http://server-dotnet:8080"
+          value: "http://api.meetx.local"
         - name: MAIL_HOST
           value: "sandbox.smtp.mailtrap.io"
         - name: MAIL_PORT
@@ -81,7 +81,7 @@ metadata:
   name: server-auth
   namespace: meetx
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: server-auth
   ports:

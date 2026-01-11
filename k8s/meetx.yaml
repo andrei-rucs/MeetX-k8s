@@ -25,7 +25,7 @@ metadata:
   name: meetx
   namespace: meetx
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: meetx
   ports:

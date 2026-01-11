@@ -51,7 +51,7 @@ metadata:
   name: pgadmin
   namespace: meetx
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: pgadmin
   ports:

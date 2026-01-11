@@ -108,7 +108,7 @@ metadata:
   name: server-dotnet
   namespace: meetx
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: server-dotnet
   ports:
