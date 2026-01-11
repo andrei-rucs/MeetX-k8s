@@ -59,17 +59,13 @@ spec:
         - name: RefreshJwtConfiguration__Audience
           value: {{ .Values.serverDotnet.env.jwtAudience | quote }}
         - name: CorsConfiguration__Origins__0
-          value: "http://localhost:8080"
+          value: "http://{{ .Values.ingress.hosts.api }}"
         - name: CorsConfiguration__Origins__1
-          value: "http://localhost:3001"
+          value: "http://{{ .Values.ingress.hosts.auth }}"
         - name: CorsConfiguration__Origins__2
-          value: "http://localhost:80"
+          value: "http://{{ .Values.ingress.hosts.frontend }}"
         - name: CorsConfiguration__Origins__3
           value: "http://localhost"
-        - name: CorsConfiguration__Origins__4
-          value: "http://meetx"
-        - name: CorsConfiguration__Origins__5
-          value: "http://server-auth"
         - name: LinkedInConfiguration__ClientId
           value: {{ .Values.serverDotnet.env.linkedinClientId | quote }}
         - name: LinkedInConfiguration__ClientSecret

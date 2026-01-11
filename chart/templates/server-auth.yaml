@@ -45,7 +45,7 @@ spec:
         - name: JWT_REFRESH_EXPIRATION
           value: {{ .Values.serverAuth.env.jwtRefreshExpiration | quote }}
         - name: CORS_ORIGIN
-          value: "http://localhost:3001,http://localhost:8080,http://localhost:80,http://localhost,http://meetx,http://server-dotnet"
+          value: "http://{{ .Values.ingress.hosts.frontend }},http://{{ .Values.ingress.hosts.auth }},http://{{ .Values.ingress.hosts.api }}"
         - name: ADMIN_EMAIL
           value: {{ .Values.serverAuth.env.adminEmail | quote }}
         - name: ADMIN_PASSWORD
@@ -56,11 +56,11 @@ spec:
         - name: DB_PATH
           value: "/app/data/users.json"
         - name: AUTH_URL
-          value: "http://localhost:3001"
+          value: "http://{{ .Values.ingress.hosts.auth }}"
         - name: FRONTEND_URL
-          value: "http://localhost"
+          value: "http://{{ .Values.ingress.hosts.frontend }}"
         - name: BACKEND_URL
-          value: "http://server-dotnet:8080"
+          value: "http://server-dotnet:{{ .Values.serverDotnet.service.port }}"
         - name: MAIL_HOST
           value: {{ .Values.serverAuth.env.mailHost | quote }}
         - name: MAIL_PORT
