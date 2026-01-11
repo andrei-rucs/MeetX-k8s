@@ -15,11 +15,11 @@ function Section4() {
             <div className="w-3/4 sm:w-3/5 h-px bg-white" />
             <p className="text-center text-gray-400 w-3/4 sm:w-3/5 mb-3 text-[0.8rem]
             sm:text-sm md:text-base font-light">
-                MeetX was born from my dedication to simplify the collaboration processes and
-                maximize productivity. As a solo developer, I recognized the need for a
+                MeetX was born from our dedication to simplify the collaboration processes and
+                maximize productivity. As a solo developer, we recognized the need for a
                 user-friendly platform that enables seamless communication and project
-                management among peers. Driven by my enthusiasm for streamlining collaboration,
-                I created MeetX—a space designed to empower individuals to connect, share ideas,
+                management among peers. Driven by our enthusiasm for streamlining collaboration,
+                we created MeetX - a space designed to empower individuals to connect, share ideas,
                 and achieve their goals effectively.
             </p>
         </div>
