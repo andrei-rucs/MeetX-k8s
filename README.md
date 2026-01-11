@@ -4,28 +4,28 @@ Seamless collaboration among professionals in the same field, enabling easy comm
 Create chats and groups and share your knowledge with other people from your field.
 
 ## Front Page
-![Front page 1](screnshots/front-page1.png)
-![Front page 2](screnshots/front-page2.png)
+![Front page 1](./screenshots/front-page1.png)
+![Front page 2](./screenshots/front-page2.png)
 
 ## Login Pages
-![Login page 1](screnshots/login-page1.png)
-![Login page 2](screnshots/login-page2.png)
+![Login page 1](./screenshots/login-page1.png)
+![Login page 2](./screenshots/login-page2.png)
 
 ## Personal Dashboard & Chats
-![Dash 1](screnshots/dashboard1.png)
-![Dash 2](screnshots/dashboard2.png)
+![Dash 1](./screenshots/dashboard1.png)
+![Dash 2](./screenshots/dashboard2.png)
 
 ## PGAdmin
-![PGAdmin 1](screnshots/pgadmin1.png)
-![PGAdmin 2](screnshots/pgadmin2.png)
+![PGAdmin 1](./screenshots/pgadmin1.png)
+![PGAdmin 2](./screenshots/pgadmin2.png)
 
 ## Portainer
-![Portainer 1](screnshots/portainer1.png)
-![Portainer 2](screnshots/portainer2.png)
+![Portainer 1](./screenshots/portainer1.png)
+![Portainer 2](./screenshots/portainer2.png)
 
 ## Grafana
-![Grafana 1](screnshots/grafana1.png)
-![Grafana 2](screnshots/grafana2.png)
+![Grafana 1](./screenshots/grafana1.png)
+![Grafana 2](./screenshots/grafana2.png)
 
 
 # How to run
