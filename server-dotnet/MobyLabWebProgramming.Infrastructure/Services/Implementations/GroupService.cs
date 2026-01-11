@@ -144,7 +144,7 @@ public class GroupService : IGroupService
             await _repository.UpdateAsync(result, cancellationToken);
         }
 
-        string link = $"http://localhost:5173/invite?groupId={groupId}&token={HttpUtility.UrlEncode(token)}";
+        string link = $"http://meetx.local/invite?groupId={groupId}&token={HttpUtility.UrlEncode(token)}";
 
         return ServiceResponse<GroupLinkResponse>.ForSuccess(new GroupLinkResponse { Link = link });
     }

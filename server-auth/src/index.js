@@ -97,7 +97,7 @@ app.get('/health', (req, res) => {
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-    console.log(`MeetX Auth Server running on http://localhost:${PORT}`);
-    console.log(`Login: http://localhost:${PORT}/login`);
-    console.log(`Register: http://localhost:${PORT}/register`);
+    console.log(`MeetX Auth Server running on http://auth.meetx.local:${PORT}`);
+    console.log(`Login: http://auth.meetx.local:${PORT}/login`);
+    console.log(`Register: http://auth.meetx.local:${PORT}/register`);
 });
