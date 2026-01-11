@@ -1,5 +1,3 @@
-import stelian from "./img/stelian.jpeg"
-
 function Section4() {
 
     return (
@@ -14,7 +12,7 @@ function Section4() {
                 Welcome to <span className="text-purple-700">MeetX</span>,
                 where the power of collaboration is just a click away.
             </p>
-            <div className="w-3/4 sm:w-3/5 h-px bg-white"/>
+            <div className="w-3/4 sm:w-3/5 h-px bg-white" />
             <p className="text-center text-gray-400 w-3/4 sm:w-3/5 mb-3 text-[0.8rem]
             sm:text-sm md:text-base font-light">
                 MeetX was born from my dedication to simplify the collaboration processes and
@@ -24,16 +22,6 @@ function Section4() {
                 I created MeetX—a space designed to empower individuals to connect, share ideas,
                 and achieve their goals effectively.
             </p>
-            <div className='w-full max-w-md flex justify-center items-center h-fit'>
-                <div className="flex flex-col w-full h-fit text-center justify-center
-                items-center mt-7 gap-2">
-                    <img src={stelian} className="aspect-square bg-black
-                    rounded-full w-1/3" loading="lazy"/>
-                    <p className="text-gray-300 font-light text-base">
-                        Stelian
-                    </p>
-                </div>
-            </div>
         </div>
     );
 }
