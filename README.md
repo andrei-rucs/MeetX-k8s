@@ -95,17 +95,23 @@ helm install metrics-server metrics-server/metrics-server
 ## Portainer
 Install the portainer server and agent with:
 ```sh
-helm install portainer charts/portainer
+helm install portainer ./charts/portainer
 ```
 Access:
 [Portainer](portainer.meetx.local)
 
-## Prometheus stack (Prometheus, Grafana, Alertmanager)
+## Prometheus stack (Prometheus, Grafana, Alertmanager) + Service Monitors
+
 Install the prometheus stack with:
 ```sh
-helm install monitoring charts/monitoring 
+helm install monitoring ./charts/monitoring 
 ```
 Access:
 [Grafana](grafana.meetx.local)
 [Prometheus](prometheus.meetx.local)
 [Alertmanager](alertmanager.meetx.local)
+
+Then install the service monitors with:
+```sh
+helm install meetx-service-monitors ./charts/meetx-service-monitors
+```
