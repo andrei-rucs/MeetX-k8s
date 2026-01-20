@@ -1,0 +1,7 @@
+metrics:
+  enabled: true
+  serviceMonitor:
+    interval: 30s
+    scrapeTimeout: 10s
+    labels:
+      release: monitoring

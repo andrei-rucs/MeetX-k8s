@@ -48,7 +48,7 @@ Update `/etc/hosts` to add the hostname the local app deployment needs:
 ```
 
 ## Build Docker Images
-Firstly, run `eval $(minikube docker-env)` before the `docker build` comands to ensure that the Minikube's Docker daemon takes care of building the container images. 
+Firstly, run `eval $(minikube docker-env)` before the `docker build` commands to ensure that the Minikube's Docker daemon takes care of building the container images. 
 
 Build all the docker images with `docker build <Dockerfile path> -t <image-name:latest>`.
 The `meetx-frontend` image has to be deployed using the following additional args:
@@ -62,7 +62,7 @@ docker build -t meetx-frontend:latest \
 ## Deploy to k8s
 Deploy the meetx helm chart with:
 ```sh
-helm install meetx ./chart --namespace meetx --create-namespace 
+helm install meetx ./charts/meetx
 ```
 
 ## Access the app
@@ -95,7 +95,7 @@ helm install metrics-server metrics-server/metrics-server
 ## Portainer
 Install the portainer server and agent with:
 ```sh
-helm install charts/portainer -n portainer --create-namespace
+helm install portainer charts/portainer
 ```
 Access:
 [Portainer](portainer.meetx.local)
@@ -103,7 +103,7 @@ Access:
 ## Prometheus stack (Prometheus, Grafana, Alertmanager)
 Install the prometheus stack with:
 ```sh
-helm install charts/monitoring 
+helm install monitoring charts/monitoring 
 ```
 Access:
 [Grafana](grafana.meetx.local)
